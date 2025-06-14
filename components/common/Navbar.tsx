@@ -2,8 +2,8 @@ import { navLinks } from '@/utils/constants';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '../ui/button';
 import Search from './Search';
+import { Button } from '../ui/button';
 
 
 
@@ -11,7 +11,7 @@ const Navbar = () => {
     const isSignIn = false;
 
   return (
-    <header className="w-full flex h-14 sticky bg-background items-center px-5">
+    <header className="w-full flex h-14 sticky top-0 z-50 bg-background items-center px-5">
         <nav className="flex w-full items-center justify-between">
             <div className='flex space-x-12'>
                 <div className='center space-x-3'>
@@ -76,12 +76,24 @@ const Navbar = () => {
                         </div>
                         :
                         <div className='flex items-center space-x-4'>
-                            <Button className='bg-[#0c2c24] text-[#00bb6a] text-[15px]'>
-                                Sign Up
-                            </Button>
-                            <Button className='bg-[#18253a] text-[#4b92fd] text-[15px]'>
-                                Sign In
-                            </Button>
+                            <Link 
+                                href={'/signup'}
+                            >
+                                <Button
+                                    className='bg-[#0c2c24] text-[#00bb6a] text-[15px]'
+                                >
+                                    Sign Up
+                                </Button>
+                            </Link>
+                            <Link 
+                                href={'/login'}
+                            >
+                                 <Button
+                                    className='bg-[#18253a] text-[#4b92fd] text-[15px]'
+                                >
+                                    Sign Up
+                                </Button>
+                            </Link>
                         </div>
                 }
             </div>

@@ -6,6 +6,7 @@
 @theme {
   --color-background : #0E0F14;
   --color-genGray : #8996aa;
+  --color-foreground : #14151b;
 }
 
 @layer utilities {
@@ -63,7 +64,7 @@
 :root {
   --radius : 0.625rem;
   --background : #0E0F14;
-  --foreground : oklch(0.141 0.005 285.823);
+  --foreground : #14151b;
   --card : oklch(1 0 0);
   --card-foreground : oklch(0.141 0.005 285.823);
   --popover : oklch(1 0 0);
@@ -97,7 +98,7 @@
 
 .dark {
   --background : oklch(0.141 0.005 285.823);
-  --foreground : oklch(0.985 0 0);
+  --foreground : #14151b;
   --card : oklch(0.21 0.006 285.885);
   --card-foreground : oklch(0.985 0 0);
   --popover : oklch(0.21 0.006 285.885);
