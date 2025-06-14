@@ -1,6 +1,10 @@
+import CreateAccountForm from "@/components/forms/SignUpForm"
+
 const page = () => {
   return (
-    <div>page</div>
+    <div className="flex items-center justify-center">
+      <CreateAccountForm/>
+    </div>
   )
 }
 

@@ -91,7 +91,7 @@ const Navbar = () => {
                                  <Button
                                     className='bg-[#18253a] text-[#4b92fd] text-[15px]'
                                 >
-                                    Sign Up
+                                    Sign In
                                 </Button>
                             </Link>
                         </div>
