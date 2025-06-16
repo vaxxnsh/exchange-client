@@ -7,8 +7,14 @@
   --color-background : #0E0F14;
   --color-genGray : #8996aa;
   --color-foreground : #14151b;
+  --color-overfore : #202127;
+  --color-greenBackgroundTransparent: rgba(0,194,120,.12);
+  --color-redBackgroundTransparent: rgba(234,56,59,.12);
+  --color-baseBackgroundL2: rgb(32,33,39);
+  --color-baseBackgroundL3: rgb(32,33,39);
+  --color-greenPrimaryButtonBackground: rgb(0,194,120);
 }
-
+        
 @layer utilities {
   .page{
     @apply w-full min-h-svh;
