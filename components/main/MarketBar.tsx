@@ -1,17 +1,36 @@
+"use client";
+
 import { ChevronDown } from "lucide-react";
 import { getTicker } from "@/utils/httpClient";
 import { formatPercentage, formatPrice, formatSymbol, formatVolume, getBaseCurrency } from "@/utils/helpers";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { SignalingManager } from "@/utils/SignalingManager";
 
-const MarketBar = async ({ market }: { market: string }) => {
-    let ticker: Ticker | null = null;
+const MarketBar = ({ market }: { market: string }) => {
+    const [ticker,setTicker] = useState<Ticker | null>(null);
+ 
+    useEffect(() => {
+        getTicker(market).then(setTicker);
+        SignalingManager.getInstance().registerCallback("ticker", (data: Partial<Ticker>)  =>  setTicker(prevTicker => ({
+            firstPrice: data?.firstPrice ?? prevTicker?.firstPrice ?? '',
+            high: data?.high ?? prevTicker?.high ?? '',
+            lastPrice: data?.lastPrice ?? prevTicker?.lastPrice ?? '',
+            low: data?.low ?? prevTicker?.low ?? '',
+            priceChange: data?.priceChange ?? prevTicker?.priceChange ?? '',
+            priceChangePercent: data?.priceChangePercent ?? prevTicker?.priceChangePercent ?? '',
+            quoteVolume: data?.quoteVolume ?? prevTicker?.quoteVolume ?? '',
+            symbol: data?.symbol ?? prevTicker?.symbol ?? '',
+            trades: data?.trades ?? prevTicker?.trades ?? '',
+            volume: data?.volume ?? prevTicker?.volume ?? '',
+        })), `TICKER-${market}`);
+        SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
 
-    try {
-        ticker = await getTicker(market);
-        console.log(ticker);
-    } catch (err) {
-        console.log(err);
-    }
+        return () => {
+            SignalingManager.getInstance().deRegisterCallback("ticker", `TICKER-${market}`);
+            SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]});
+        }
+    }, [market])
 
     if (!ticker) {
         return (
@@ -20,10 +39,6 @@ const MarketBar = async ({ market }: { market: string }) => {
             </div>
         );
     }
-
-    const isPositive = parseFloat(ticker.priceChange) >= 0;
-    const baseCurrency = getBaseCurrency(ticker.symbol);
-    const formattedSymbol = formatSymbol(ticker.symbol);
 
     return (
         <div className="flex items-center flex-row h-[72px] w-full overflow-auto pl-4 bg-transparent">
@@ -44,8 +59,8 @@ const MarketBar = async ({ market }: { market: string }) => {
                                     />
                                 </div>
                                 <p className="font-medium text-white text-nowrap">
-                                    {baseCurrency}
-                                    <span className="text-gray-400">/{formattedSymbol.split('/')[1]}</span>
+                                    {getBaseCurrency(ticker.symbol)}
+                                    <span className="text-gray-400">/{formatSymbol(ticker.symbol).split('/')[1]}</span>
                                 </p>
                             </div>
                         </div>
@@ -59,7 +74,7 @@ const MarketBar = async ({ market }: { market: string }) => {
                                 className="cursor-help text-left"
                             >
                                 <p className={`font-medium text-lg tabular-nums ${
-                                    isPositive ? 'text-green-400' : 'text-red-400'
+                                    parseFloat(ticker.priceChange) >= 0 ? 'text-green-400' : 'text-red-400'
                                 }`}>
                                     {formatPrice(ticker.lastPrice)}
                                 </p>
@@ -72,9 +87,9 @@ const MarketBar = async ({ market }: { market: string }) => {
                         <div className="flex justify-center flex-col relative">
                             <p className="font-medium text-gray-400 text-xs">24H Change</p>
                             <span className={`mt-1 text-sm leading-4 font-normal tabular-nums ${
-                                isPositive ? 'text-green-400' : 'text-red-400'
+                                parseFloat(ticker.priceChange) >= 0 ? 'text-green-400' : 'text-red-400'
                             }`}>
-                                {isPositive ? '+' : ''}{formatPrice(ticker.priceChange)} {formatPercentage(ticker.priceChangePercent)}
+                                {parseFloat(ticker.priceChange) >= 0 ? '+' : ''}{formatPrice(ticker.priceChange)} {formatPercentage(ticker.priceChangePercent)}
                             </span>
                         </div>
 

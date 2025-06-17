@@ -1,8 +1,7 @@
 
 export const BidTable = ({ bids }: {bids: [string, string][]}) => {
     let currentTotal = 0; 
-    const relevantBids = bids.slice(0, 15);
-    console.log(relevantBids)
+    const relevantBids = bids.filter(bid => Number(bid[1]) != 0).slice(0, 15);
     const bidsWithTotal: [string, string, number][] = relevantBids.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
     const maxTotal = relevantBids.reduce((acc, [, quantity]) => acc + Number(quantity), 0);
 

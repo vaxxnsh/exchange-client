@@ -1,6 +1,6 @@
 export const AskTable = ({ asks }: { asks: [string, string][] }) => {
     let currentTotal = 0;
-    const relevantAsks = asks.slice(0, 15);
+    const relevantAsks = asks.filter(bid => Number(bid[1]) != 0).slice(0, 15);
     /*
      * 129.93 10
      * 129.94 5
